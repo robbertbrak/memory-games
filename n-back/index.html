@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+    <head>
+        <title>N-Back</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, max-scale=1">
+        <link rel="stylesheet" type="text/css" href="n-back.css" />
+    </head>
+    <body>
+        <div class="game-container">
+            <h1>N-Back</h1>
+            <div><label for="current-level">Level</label>: <input type="number" id="current-level" value="1" min="1" max="99" /></div>
+            <div>Score: <span id="current-score">0</span></div>
+            <div id="letters-display"></div>
+            <div id="answer-grid">
+
+            </div>
+            <div id="feedback">Ready? Press Start.</div>
+            <button id="start-button" role="button">Start</button>
+            <div id="game-rules">
+                <p>
+                    How to play: you are shown a sequence of letters.
+                    The goal is to click the letter that was shown <i>N</i> turns earlier, hence the name "N-Back".
+                    For example, suppose you are on level 2 and the initial sequence is D - A - C.
+                    The correct answer is then "D".
+                    If you give the correct answer, you will get the next letter.
+                    Continuing the example, suppose the next letter is B, so the total sequence is D - A - C - B.
+                    The correct answer is then "A".
+                </p>
+                <p>
+                    If you give 20 correct answers in a row, you will advance to the next level.
+                    If the current level is too easy or too hard, you can always adjust the current level manually.
+                </p>
+            </div>
+        </div>
+
+        <script src="n-back.js"></script>
+    </body>
+</html>

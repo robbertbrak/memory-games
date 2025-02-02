@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" type="text/css" href="copy-cat.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1, max-scale=1">
+        <title>Copy Cat</title>
+    </head>
+    <body>
+        <div class="game-container">
+            <h1>Copy Cat</h1>
+            <div>Level: <span id="current-level">5</span></div>
+            <div>Score: <span id="current-score">0</span></div>
+            <div class="grid-container">
+                <div id="game" class="grid"></div>
+            </div>
+            <button id="next-button" role="button">Start</button>
+            <div id="message">Ready? Press Start.</div>
+            <div id="game-rules">
+                How to play: your goal is to copy each sequence without mistakes.
+                When you give 3 right answers in a row, you level up and the next sequence will be longer.
+                When you give 3 wrong answers in a row, you go down a level and the next sequence will be shorter.
+            </div>
+        </div>
+        <script src="copy-cat.js"></script>
+    </body>
+</html>
