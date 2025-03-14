@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Date of the Week Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 20px;
+    }
+
+    .score-board {
+      background-color: #f0f0f0;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 200px;
+      padding: 8px;
+      font-size: 16px;
+      margin-right: 10px;
+    }
+
+    button {
+      padding: 8px 15px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+<h1>Date of the Week</h1>
+<p>Guess the day of the week for the displayed date!</p>
+
+<div class="score-board">
+  <h3>Statistics:</h3>
+  <p>Correct Answers: <span id="correctCount">0</span></p>
+  <p>Incorrect Answers: <span id="incorrectCount">0</span></p>
+  <p>
+    Current Streak: <span id="currentStreak">0</span> correct answers
+  </p>
+  <p>
+    Average of Last 20:
+    <span id="rollingAverage">0.00 / 0.00</span>
+  </p>
+</div>
+
+<div id="dateDisplay"></div>
+<div class="answer-container">
+  <button onclick="checkGuess('1')">Mon</button>
+  <button onclick="checkGuess('2')">Tue</button>
+  <button onclick="checkGuess('3')">Wed</button>
+  <button onclick="checkGuess('4')">Thu</button>
+  <button onclick="checkGuess('5')">Fri</button>
+  <button onclick="checkGuess('6')">Sat</button>
+  <button onclick="checkGuess('0')">Sun</button>
+</div>
+
+<script>
+  let correctCount = 0;
+  let incorrectCount = 0;
+  let currentStreak = 0;
+  let counts = [];
+  let thinkingTimes = [];
+  const maxRolling = 20;
+  let rollingAverage = 0;
+  let rollingAverageTime = 0;
+  let startTime = 0;
+
+  // Days of the week names
+  const days = [
+    "Sun",
+    "Mon",
+    "Tue",
+    "Wed",
+    "Thu",
+    "Fri",
+    "Sat",
+  ];
+
+  function generateValidDate() {
+    let date;
+    do {
+      const year = Math.floor(Math.random() * (2301 - 1900)) + 1900;
+      const month = Math.floor(Math.random() * 12);
+      const day = Math.floor(Math.random() * 31) + 1;
+
+      date = new Date(year, month, day);
+    } while (
+      date.getFullYear() < 1900 || date.getFullYear() > 2300
+      );
+
+    return date;
+  }
+
+  function updateStats(correct) {
+    if (correct) {
+      correctCount++;
+      currentStreak++;
+
+    } else {
+      incorrectCount++;
+      currentStreak = 0;
+    }
+
+    counts.push(correct ? 1 : 0);
+    thinkingTimes.push(new Date().getTime() - startTime);
+
+    if (counts.length > maxRolling) {
+      counts.shift();
+      thinkingTimes.push(new Date().getTime() - startTime);
+    }
+
+    const sum = counts.reduce((acc, val) => acc + val, 0);
+    rollingAverage = sum / Math.min(counts.length, maxRolling);
+    const thinkingTimeSum = thinkingTimes.reduce((acc, val) => acc + val, 0);
+    rollingAverageTime = thinkingTimeSum / Math.min(thinkingTimes.length, maxRolling);
+
+    document.getElementById("correctCount").textContent = correctCount;
+    document.getElementById("incorrectCount").textContent = incorrectCount;
+    document.getElementById("currentStreak").textContent = currentStreak;
+    document.getElementById("rollingAverage").textContent = rollingAverage.toFixed(2) + " / " + rollingAverageTime.toFixed(2);
+  }
+
+  function checkGuess(day) {
+    const inputDay = parseInt(day);
+    const displayedDate = new Date(document.getElementById("dateDisplay").textContent);
+    const correctDay = displayedDate.getDay();
+    console.log(inputDay, correctDay);
+
+    if (inputDay === correctDay) {
+      updateStats(true);
+    } else {
+      updateStats(false);
+    }
+    nextLevel();
+  }
+
+  function nextLevel() {
+    let newDate;
+    do {
+      newDate = generateValidDate();
+    } while (newDate.toDateString() === displayedDate.toDateString());
+
+    const year = newDate.getFullYear();
+    const month = newDate.getMonth() + 1;
+    const day = newDate.getDate();
+
+    const paddedMonth = String(month).padStart(2, "0");
+    const paddedDay = String(day).padStart(2, "0");
+    document.getElementById("dateDisplay").textContent = `${year}-${paddedMonth}-${paddedDay}`;
+    startTime = new Date().getTime();
+  }
+
+  displayedDate = new Date();
+
+  // Initialize the game
+  nextLevel();
+</script>
+</body>
+</html>
